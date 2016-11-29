@@ -62,6 +62,59 @@ void takeInput(){
     std::cout<<"Enter a command"<<std::endl;
 }
 
+void Interface(){
+
+    std::cout << "Welcome to the CS220 Library." << std::endl;
+    std::cout << "Please enter a command. Enter H for help." << std::endl;
+
+    std::string input = ""; //our input variable
+
+    char myChar  = {0};
+    while (true) {
+        std::cout << "Please enter a 1 character command: ";
+        getline(std::cin, input);
+
+        if (input.length() == 1) {
+            myChar = input[0];
+            break;
+        }
+
+        std::cout << "Invalid character, please try again" << std::endl;
+    }
+    std::cout << "You entered: " << myChar << std::endl << std::endl;
+
+    if(input=="H"||input=="h"){
+        //list available commands
+        help();
+    }else if(input=="I"||input=="i"){
+        //display info on a title
+        title();
+    }else if(input=="L"||input=="l"){
+        //list titles
+        list();
+    }else if(input=="A"||input=="a"){
+        //add a title
+        add();
+    }else if(input=="M"||input=="m"){
+        //change the want value
+        modify();
+    }else if(input=="S"||input=="s"){
+        sell();
+    }else if(input=="O"||input=="o"){
+        order();
+    }else if(input=="D"||input=="d"){
+        delivery();
+    }else if(input=="R"||input=="r"){
+        invoice();
+    }else if(input=="Q"||input=="q"){
+        quit();
+    }else{
+        std::cout << "Invalid command, please try another." << std::endl;
+    }
+
+}
+
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
     return 0;
