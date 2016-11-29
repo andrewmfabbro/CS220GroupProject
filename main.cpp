@@ -27,13 +27,30 @@ void list(){
     myStore->toString();
 }
 
-void add(std::string title){}
+void add(std::string title) { //add a new title alphabetically
+    int newWant;
+    int newHave;
+    std::cout << "Enter a Want Value: ";
+    std::cin >> newWant;
+    std::cout << "Enter a Have Value: ";
+    std::cin >> newHave;
+    myStore->add(title, newHave, newWant);
+}
 
-void modify(std::string title){}
+void modify(std::string title) { //modify the want values
+    Book* bookToModify = myStore->getBook(title);
+    int newWant;
+    std::cout << "Current Have: " << bookToModify->getHaveValue() << " Current Want: " << bookToModify->getNeedValue() << std::endl;
+    std::cout << "Enter a new Want Value: ";
+    std::cin >> newWant;
+    bookToModify->changeNeedValue(newWant);
+}
+void sell(std::string title) { //decrease count for title by 1
+    Book* bookToSell = myStore->getBook(title);
+    bookToSell->sellBook(1);
 
-void sell(std::string title){}
-
-void order(/*filename*/){}
+}
+void order(/*filename*/); //purchase more books
 
 void delivery(/*filename*/){}
 
