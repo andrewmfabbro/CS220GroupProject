@@ -5,6 +5,8 @@
 #ifndef LINKEDNODE_H
 #define LINKEDNODE_H
 #include<string>
+#include "WaitList.h"
+#include<iostream>
 
 
 
@@ -14,28 +16,32 @@ private:
     std::string title;
    // std::string author;
     int haveValue;
-    int needValue;
-    double price;
+    int wantValue;
+    //double price;
     Book* next;
     WaitList* waitList = new WaitList();
 
 
 public:
 
-    Book(std::string title, int have, int need, double price){
+    Book(std::string title, int have, int need){
         this->title = title;
         this->haveValue = have;
-        this->needValue = need;
-        this->price = price;
+        this->wantValue = need;
+        //this->price = price;
         next = nullptr;
     }
 
+    ~Book(){
+        delete waitList;
+    }
+
     std::string getTitle(){
-        return name;
+        return title;
     }
 
     void setTitle(std::string title){
-        this.title = title;
+        title = title;
     }
 
     int getHaveValue(){ return haveValue; }
@@ -44,30 +50,32 @@ public:
         this->haveValue = newValue;
     }
 
-    int getNeedValue(){ return needValue; }
+    int getNeedValue(){ return wantValue; }
 
     void changeNeedValue(int newValue){
-        this->needValue = newValue;
+        this->wantValue = newValue;
     }
 
-    void moreNeed(){ this->needValue++; }
+    void moreNeed(){ this->wantValue++; }
 
     void addToWaitList(std::string nameToAdd){
         waitList->enqueue(nameToAdd);
     }
 
-    void updatePrice(double newPrice){
+ /*   void updatePrice(double newPrice){
         this->price = newPrice;
-    }
+    }*/
 
     void sellBook(int amount){
         if(haveValue > amount){
             haveValue-=amount;
         } else {
-            needValue += amount-haveValue;
+            wantValue += amount-haveValue;
             int need = amount-haveValue;
             haveValue = 0;
-            std::string nameToAdd = std::cin << "Enter a name to add to Wait List: " << std::endl;
+            std::string nameToAdd;
+            std::cout << "Enter a name to add to Wait List: ";
+            std::cin >> nameToAdd;
             for(int i = 0; i < need; i++){
                 waitList->enqueue(nameToAdd);
             }
@@ -79,21 +87,21 @@ public:
         return next;
     }
 
-    void setNext(LinkedNode* newNext){
+    void setNext(Book* newNext){
         next = newNext;
     }
 
     void getOrder(int newAmount){
         while(!waitList->isEmpty()){
-            std::cout << waitList->dequeue() + this->name;
+            std::cout << waitList->dequeue() + this->title;
             newAmount--;
         }
-        have = newAmount;
-        needValue = 0;
+        this->haveValue = newAmount;
+        wantValue = 0;
     }
 
     void toString(){
-        std::cout << title +  " " + haveValue + " " + price + " " + needValue <<std::endl;
+        std::cout << "Title: " << title <<  " Have: " << haveValue << " Want: " << wantValue << std::endl;
     }
 
 
