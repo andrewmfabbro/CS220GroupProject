@@ -8,10 +8,10 @@
 #include <stdexcept>
 #include<string>
 
-#include "List.h"
+//#include "List.h"
 #include "Book.h"
 
-class BookStore: public List{
+class BookStore{
 private:
     Book* start;
     Book* end;
@@ -29,7 +29,7 @@ public:
 
     //inserts the new item into the list at the specified index
     //if the index is invalid (< 0 or > currItemCount), throws an out_of_range exception
-    void add(int itemToAdd, int index);
+    void add(std::string titleToAdd, int have, int want);
 
     //removes the item at index from the list, then returns a copy of that item
     //if the index is invalid, throws an out_of_range exception
@@ -45,13 +45,13 @@ public:
     void clearList();
 
     //returns the index of the first occurrence of itemToFind in the list, or -1 if not present
-    void find(std::string itemToFind);
+    bool find(std::string itemToFind);
 
-
+    Book* getBook(std::string title);
 
     //returns a string representing the given list in the exact format shown below
     // {1, 2, 3, 4, 5}
-    std::string toString();
+    void toString();
 
     //returns the total number of lines run by this object
     long getTotalLinesRun();
