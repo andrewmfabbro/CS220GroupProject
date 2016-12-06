@@ -67,7 +67,7 @@ public:
     }*/
 
     void sellBook(int amount){
-        if(haveValue > amount){
+        if(haveValue >= amount){
             haveValue-=amount;
         } else {
             wantValue += amount-haveValue;
@@ -79,6 +79,7 @@ public:
             for(int i = 0; i < need; i++){
                 waitList->enqueue(nameToAdd);
             }
+            waitList->printList();
 
         }
     }
@@ -102,8 +103,24 @@ public:
 
     void toString(){
         std::cout << "Title: " << title <<  " Have: " << haveValue << " Want: " << wantValue << std::endl;
+        if(waitList->isActive()) {
+            std::cout << "Wait List: " << std::endl;
+            waitList->printList();
+        }
     }
 
+    std::string toFile(){
+        std::string toFileString = title + "," + std::to_string(haveValue) + "," + std::to_string(wantValue);
+        return toFileString;
+    }
+
+    bool hasWaitList(){
+        return waitList->isActive();
+    }
+
+    std::string waitListToFile(){
+        return title + waitList->list();
+    }
 
 };
 
