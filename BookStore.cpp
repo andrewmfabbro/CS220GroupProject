@@ -41,6 +41,10 @@ bool BookStore::compareBooks(std::string existing, std::string newBook){
 }
 
 void BookStore::add(std::string titleToAdd, int have, int want) {
+    if(find(titleToAdd)){
+        std::cout << "This book is already in your bookstore!" << std::endl;
+        return;
+    }
     Book* bookToAdd = new Book(titleToAdd, have, want);
     if(capacity == 0){
         start = bookToAdd;
