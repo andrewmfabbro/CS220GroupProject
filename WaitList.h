@@ -14,7 +14,7 @@ private:
     std::string* array;
     int currCapacity;
     int currItemCount;
-
+    bool active;
     int totalLinesRun;
 
 public:
@@ -28,6 +28,12 @@ public:
     long getTotalLinesRun();
     void resetTotalLinesRun();
     int calcSizeOf();
+
+    void printList();
+
+    bool isActive();
+
+    std::string list();
 };
 
 #endif //STACKSANDQUEUES_ARRAYQUEUE_H
