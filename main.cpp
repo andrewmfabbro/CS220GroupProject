@@ -50,13 +50,33 @@ void add(){
 }
 
 void add(std::string title) { //add a new title alphabetically
-    int newWant;
-    int newHave;
-    std::cout << "Enter a Want Value: ";
-    std::cin >> newWant;
-    std::cout << "Enter a Have Value: ";
-    std::cin >> newHave;
-    myStore->add(title, newHave, newWant);
+    if (myStore->find(title)){
+        std::cout<<"this book is already in the store."<<std::endl;
+        modify(title);
+    }
+    else {
+        int newWant;
+        int newHave;
+        std::cout << "Enter a Want Value: ";
+        std::cin >> newWant;
+        while (std::cin.fail()){
+            std::cout<<"invalid entry"<<std::endl;
+            std::cin.clear();
+            std::cin.ignore();
+            std::cout<<"Enter a Want Value: ";
+            std::cin>>newWant;
+        }
+        std::cout << "Enter a Have Value: ";
+        std::cin >> newHave;
+        while (std::cin.fail()){
+            std::cout<<"invalid entry"<<std::endl;
+            std::cin.clear();
+            std::cin.ignore();
+            std::cout<<"Enter a Have Value: ";
+            std::cin>>newHave;
+        }
+        myStore->add(title, newHave, newWant);
+    }
 }
 
 void modify(){
@@ -73,6 +93,13 @@ void modify(std::string title) { //modify the want values
     std::cout << "Enter a new Want Value: ";
 
     std::cin >> newWant;
+    while (std::cin.fail()){
+        std::cout<<"invalid entry"<<std::endl;
+        std::cin.clear();
+        std::cin.ignore();
+        std::cout<<"Enter a new Want Value: ";
+        std::cin>>newWant;
+    }
     bookToModify->changeNeedValue(newWant);
 }
 
