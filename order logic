@@ -1,0 +1,48 @@
+#include "BookStore.h"
+#include <iostream>
+
+void addBook(std::string title, int valueToAdd);
+
+BookStore* myStore;
+//This should be part of takeDelivery
+void addInOrder(std::string filename){
+    int fileLines; //= to number of lines in file
+
+    for (int i=0;i<fileLines;i++){
+        std::string title;//read from before comma
+        int valueToAdd;//read from after comma
+        addBook(title,valueToAdd);
+    }
+
+}
+
+//this could go in the bookstore class as a stub for takeDelivery
+void addBook(std::string title,int valueToAdd){
+    if (myStore->find(title)!=-1){
+        Book* BookToModify=myStore->getBook(title);
+        int currentHave=BookToModify->getHaveValue();
+        BookToModify->changeHaveValue(currentHave+valueToAdd);
+    } else{
+        myStore->add(title,valueToAdd,0);
+    }
+}
+
+
+std::string writeOrder(){
+    Book* currentBook=myStore.start; //doesn't work, need function
+    std::string myFile; //figure this out later
+    for (int i=0;i<myStore->size();i++){
+        if (currentBook->getNeedValue()>0){
+            myFile+="/n"+currentBook->getTitle()+","+currentBook->getNeedValue()+",";
+        }
+        Book* currentBook=currentBook->getNext();
+    }
+
+    return myFile
+}
+
+
+
+void main(){
+    addInOrder("no");
+}
