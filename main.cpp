@@ -86,21 +86,55 @@ void modify(){
     modify(title);
 }
 
-void modify(std::string title) { //modify the want values
-    Book* bookToModify = myStore->getBook(title);
-    int newWant;
-    std::cout << "Current Have: " << bookToModify->getHaveValue() << " Current Want: " << bookToModify->getNeedValue() << std::endl;
-    std::cout << "Enter a new Want Value: ";
 
-    std::cin >> newWant;
-    while (std::cin.fail()){
-        std::cout<<"invalid entry"<<std::endl;
-        std::cin.clear();
-        std::cin.ignore();
-        std::cout<<"Enter a new Want Value: ";
-        std::cin>>newWant;
+void modify(std::string title) { //modify the want or have values
+    Book* bookToModify = myStore->getBook(title);
+    std::cout << "Current Have: " << bookToModify->getHaveValue() << " Current Want: " << bookToModify->getNeedValue() << std::endl;
+    std::cout<<"Enter 'H' to modify Have value. Enter 'W' to modify Want value"<<std::endl;
+
+    std::string input = "";
+    char myChar  = {0};
+    while (true) {
+        std::cout << "Please enter a 1 character command: ";
+        getline(std::cin, input);
+
+        if (input.length() == 1) {
+            myChar = input[0];
+            break;
+        }
+
+        std::cout << "Invalid character, please try again" << std::endl;
     }
-    bookToModify->changeNeedValue(newWant);
+    std::cout << "You entered: " << myChar << std::endl << std::endl;
+
+    if (input=="h"||input=="H") {
+        int newHave;
+        std::cout << "Enter a new Have Value: ";
+
+        std::cin >> newHave;
+        while (std::cin.fail()) {
+            std::cout << "invalid entry" << std::endl;
+            std::cin.clear();
+            std::cin.ignore();
+            std::cout << "Enter a new Have Value: ";
+            std::cin >> newHave;
+        }
+        bookToModify->changeHaveValue(newHave);
+    }
+    if (input=="W"||input=="w"){
+        int newWant;
+        std::cout << "Enter a new Want Value: ";
+
+        std::cin >> newWant;
+        while (std::cin.fail()) {
+            std::cout << "invalid entry" << std::endl;
+            std::cin.clear();
+            std::cin.ignore();
+            std::cout << "Enter a new Want Value: ";
+            std::cin >> newWant;
+        }
+        bookToModify->changeNeedValue(newWant);
+    }
 }
 
 void sell(){
