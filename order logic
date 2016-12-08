@@ -1,1 +1,144 @@
+//Functions changed in main.cpp:
+ /*===============================================================*/
+ 
+ void order(){
+    std::cout<<"placing order..."<<std::endl;
+    myStore->makeOrder();
+} //purchase more books
 
+void delivery(/*filename*/){
+    std::cout<<"recieving delivery..."<<std::endl;
+    myStore->takeDelivery();
+}
+
+void invoice (/*filename*/){
+    std::cout<<"writing invoice..."<<std::endl;
+    myStore->returnBooks();
+}
+ /*===============================================================*/
+ 
+ 
+ //Functions changed in Bookstore.h / Bookstore.cpp:
+ /*===============================================================*/
+ 
+ //after testing, the version of add() in Eric's file was adding books out of order/creating copies of some books
+ //due to a slight error. fixed.
+ void BookStore::add(std::string titleToAdd, int have, int want) {
+    if(find(titleToAdd)){
+        std::cout << "This book is already in your bookstore!" << std::endl;
+        return;
+    }
+    Book* bookToAdd = new Book(titleToAdd, have, want);
+    if(capacity == 0){
+        start = bookToAdd;
+        capacity++;
+    } else if(capacity == 1){
+        if(compareBooks(start->getTitle(), titleToAdd)){
+            end = start;
+            start = bookToAdd;
+            bookToAdd->setNext(end);
+            capacity++;
+        } else {
+            start->setNext(bookToAdd);
+            end = bookToAdd;
+            capacity++;
+        }
+    } else {
+        Book* currBook = start;
+        if (compareBooks(currBook->getTitle(),titleToAdd)){
+            bookToAdd->setNext(currBook);
+            start=bookToAdd;
+        } else {
+            Book *oldBook = currBook;
+            currBook=currBook->getNext();
+            for (int i = 1; i < capacity; i++) {
+                if (compareBooks(currBook->getTitle(), titleToAdd)) {
+                    bookToAdd->setNext(currBook);
+                    oldBook->setNext(bookToAdd);
+                    capacity += 1;
+                    return;
+                } else {
+                    oldBook = currBook;
+                    currBook = currBook->getNext();
+                }
+            }
+            end->setNext(bookToAdd);
+            end = bookToAdd;
+        }
+        capacity+=1;
+    }
+}
+
+//Writes books to order to preexisting file,
+//only writes book + number ordered
+    //note this is different from our usual file structure
+void BookStore::makeOrder(){
+    std::ofstream outf("OrderFile.txt");
+    if (outf){
+        Book* currBook=start;
+        for (int i=0;i<capacity;i++){
+            if (currBook->getNeedValue()>0){
+                outf<<currBook->getTitle()+","+currBook->getNeedValue()+"\n";
+            }
+            currBook=currBook->getNext();
+        }
+        outf.close();
+    } else{std::cerr << "Can't write to file." << std::endl;}
+
+}
+
+
+
+//Delivery function:
+//I think the larger delivery function would need to split up lines (using Eric's functions maybe? Not 100% on them)
+//this function takes 1 line (1 book) and checks if it is in the bookstore or not.
+//It then decreases want value for that book, prints out any people who can be take off waitlist, and adds new have value for the book.
+
+void BookStore::bookFromDelivery(std::string line){
+    if (line.length() > 0){
+        std::stringstream splitter(line);
+        std::string title, numBooks;
+        getline(splitter, title, ',');
+        getline(splitter, numBooks, ',');
+        // std::cout << "title:" << title << "\thave:" << have << "\twant:"<< want << std::endl;
+        int newValue = atoi(numBooks.c_str());
+        bool HaveBook= false;
+        Book* nodeToSearch = start;
+        for(int i = 0; i < capacity; i++){//searches bookstore for title
+            if(nodeToSearch->getTitle() == title){
+                while (newValue!=0){
+                    if (nodeToSearch->getNeedValue()>0){//if there was a previous want value
+                        for (int i=0;i<nodeToSearch->getNeedValue();i++){
+                            if(nodeToSearch->hasWaitList()){// if there are people on the waiting list
+                                std::cout<<nodeToSearch->getWaiter()<<title<<std::endl; //print + dequeue
+                            }   //if
+                            newValue--;
+                        }   //for
+                    } else{//if there is no waiting list but there was a want value
+                        nodeToSearch->changeHaveValue(nodeToSearch->getHaveValue()+1);
+                        newValue--;
+                    }   //else
+                }   //while
+                HaveBook= true;
+                i = capacity;//ends for loop if title is found
+            }   //if (title)
+        }   //for= this is the loop searching the bookstore, ended by the if statement
+        if (!HaveBook){ //if book not in store
+            add(title,newValue,0);
+        }   //if !havebook
+    }   //if line>0
+}   //BookFromDelivery();
+
+ /*===============================================================*/ /*===============================================================*/
+ 
+ 
+Functions changed in Book.h 
+ /*===============================================================*/
+ 
+ 
+ //this is needed to print people off waitlist when deliveries come in
+  std::string getWaiter(){
+        return waitList->dequeue();
+    }
+ 
+ 
